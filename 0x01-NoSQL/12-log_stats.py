@@ -11,7 +11,7 @@ def log_stats():
 
     count = nginx_collection.count_documents({})
     print('{} logs'.format(count))
-    print('Methods')
+    print('Methods:')
     for method in methods:
         print('{}method {}: {}'.format('\t', method,
               nginx_collection.count_documents({"method": method})))
