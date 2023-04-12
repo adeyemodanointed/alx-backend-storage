@@ -4,7 +4,7 @@ import redis
 import uuid
 
 
-class Cache():
+class Cache:
     """Cache class"""
     def __init__(self):
         """Initialization"""
