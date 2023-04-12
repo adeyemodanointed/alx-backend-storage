@@ -20,4 +20,5 @@ def log_stats():
               {"method": "GET", "path": "/status"})))
 
 
-log_stats()
+if __name__ == "__main__":
+    log_stats()
