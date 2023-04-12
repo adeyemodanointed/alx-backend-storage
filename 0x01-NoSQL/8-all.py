@@ -3,4 +3,5 @@
 
 
 def list_all(mongo_collection):
+    """Function returns all entries in collection"""
     return mongo_collection.find({})
