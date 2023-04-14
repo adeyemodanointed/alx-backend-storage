@@ -23,5 +23,7 @@ class Cache:
         """"""
 
     def get_str(self):
+        pass
 
     def get_int(self):
+        pass
