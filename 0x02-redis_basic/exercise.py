@@ -19,11 +19,17 @@ class Cache:
         return id
 
     def get(self, key: str,
-            fn: Callable = None) -> str:
-        """"""
+            fn: Callable = None) -> Union[str, bytes, int, float]:
+        """Get method returns desired format"""
+        value = self._redis.get(key)
+        if fn:
+            fn(value)
+        return value  
+        
+    def get_str(self, key: str) -> str:
+        """get from cache as string"""
+        return self.get(key, str)
 
-    def get_str(self):
-        pass
-
-    def get_int(self):
-        pass
+    def get_int(self, key: str) -> int:
+        """parametrize Cache.get with correct conversion function"""
+        return self.get(key, int)
