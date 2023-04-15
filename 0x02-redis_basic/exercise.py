@@ -18,8 +18,8 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 def call_history(method: Callable) -> Callable:
-    """Stores the history of input and outpu"""
-    wraps(method)
+    """Stores the history of input and output"""
+    @wraps(method)
     def wrapper(self, *args, *kwargs):
         """Wraps decorated function"""
         _input = str(args)
