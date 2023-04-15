@@ -12,20 +12,20 @@ def count_calls(method: Callable) -> Callable:
     
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        """warap the decorated function"""
+        """wrap the decorated function"""
         self._redis.incr(key)
-        return method
+        return method(self, *args, **kwargs)
     return wrapper
 
 def call_history(method: Callable) -> Callable:
     """Stores the history of input and output"""
     @wraps(method)
-    def wrapper(self, *args, *kwargs):
+    def wrapper(self, *args, **kwargs):
         """Wraps decorated function"""
         _input = str(args)
         self._redis.rpush(method.__qualname__ + ":inputs", _input)
-        _output = str(method(self, *args, **kwargs))
-        self._redis.rpush(method.__qualname__ + ":outputs", _output)
+        _output = method(self, *args, **kwargs)
+        self._redis.rpush(method.__qualname__ + ":outputs", str(_output))
         return _output
     return wrapper
 
