@@ -10,7 +10,7 @@ def count(fn: Callable) -> None:
     """Counts number of url calls"""
     @wraps(fn)
     def wrapper(*args):
-        _redis.incr("count:{}".format(args[0]))
+        _redis.incr("count:{url}")
         return fn(*args)
     return wrapper
 
