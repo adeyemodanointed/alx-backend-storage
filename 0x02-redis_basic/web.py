@@ -6,7 +6,7 @@ from functools import wraps
 _redis = __import__('redis').Redis()
 
 
-def count(fn: Callable) -> None:
+def count(fn: Callable) -> Callable:
     """Counts number of url calls"""
     @wraps(fn)
     def wrapper(url):
