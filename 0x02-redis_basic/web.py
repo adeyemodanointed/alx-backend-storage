@@ -11,17 +11,17 @@ def count(fn: Callable) -> None:
     @wraps(fn)
     def wrapper(url):
         _redis.incr(f"count:{url}")
-        return fn(url)
+        res = _redis.get(f"cached:{url}")
+        if res:
+            return res.decode('utf-8')
+        res = fn(url)
+        _redis.setex(f"cached:{url}", 10, res)
+        return res
     return wrapper
 
 
 @count
 def get_page(url: str) -> str:
     """Get page on url"""
-    res = _redis.get(url)
-    if (res is not None):
-        return res.decode('utf-8')
     res = requests.get(url)
-    _redis.set(url, res.text)
-    _redis.expire(url, 10)
-    return res
+    return res.text
