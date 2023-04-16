@@ -9,9 +9,9 @@ _redis = __import__('redis').Redis()
 def count(fn: Callable) -> None:
     """Counts number of url calls"""
     @wraps(fn)
-    def wrapper(*args):
-        _redis.incr("count:{url}")
-        return fn(*args)
+    def wrapper(url):
+        _redis.incr(f"count:{url}")
+        return fn(url)
     return wrapper
 
 
