@@ -9,13 +9,14 @@ from functools import wraps
 def count_calls(method: Callable) -> Callable:
     """function counts number of calls"""
     key = method.__qualname__
-    
+
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         """wrap the decorated function"""
         self._redis.incr(key)
         return method(self, *args, **kwargs)
     return wrapper
+
 
 def call_history(method: Callable) -> Callable:
     """Stores the history of input and output"""
@@ -29,6 +30,7 @@ def call_history(method: Callable) -> Callable:
         return _output
     return wrapper
 
+
 def replay(method: Callable):
     """replay function to display the history
     of calls of a particular function"""
@@ -40,7 +42,8 @@ def replay(method: Callable):
     outputs = _redis.lrange("{}:outputs".format(key), 0, -1)
 
     for inp, out in zip(inputs, outputs):
-        print("{}(*{}) -> {}".format(key, inp.decode('utf-8'), out.decode('utf-8')))
+        print("{}(*{}) -> {}".format(key,
+              inp.decode('utf-8'), out.decode('utf-8')))
 
 
 class Cache:
@@ -49,7 +52,7 @@ class Cache:
         """Initialization"""
         self._redis = redis.Redis(host='localhost', port=6379, db=0)
         self._redis.flushdb()
-    
+
     @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
@@ -64,8 +67,8 @@ class Cache:
         value = self._redis.get(key)
         if fn:
             fn(value)
-        return value  
-        
+        return value
+
     def get_str(self, key: str) -> str:
         """get from cache as string"""
         return self.get(key, str)
