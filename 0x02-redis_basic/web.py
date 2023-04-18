@@ -14,9 +14,10 @@ def count(fn: Callable) -> Callable:
         res = _redis.get(f"cached:{url}")
         if res:
             return res.decode('utf-8')
-        res = fn(url)
-        _redis.setex(f"cached:{url}", 10, res)
-        return res
+        res_val = fn(url)
+        _redis.set(f"count:{url}", 0)
+        _redis.setex(f"cached:{url}", 10, res_val)
+        return res_val
     return wrapper
 
 
